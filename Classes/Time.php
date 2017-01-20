@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 /*
  *  Copyright notice
  *
@@ -28,7 +29,6 @@
  * @author COD
  * Created 10.09.15 14:38
  */
-
 
 namespace Iresults\Time;
 
@@ -179,7 +179,6 @@ class Time
         return $interval;
     }
 
-
     /**
      * The __toString method allows a class to decide how it will react when it is converted to a string.
      *
@@ -253,9 +252,12 @@ class Time
      */
     public static function timeFromDateTime(DateTimeInterface $dateTime): self
     {
-        return new static($dateTime->format('H'), $dateTime->format('i'), $dateTime->format('s'));
+        return new static(
+            intval($dateTime->format('H')),
+            intval($dateTime->format('i')),
+            intval($dateTime->format('s'))
+        );
     }
-
 
     /**
      * Split the seconds into hours, minutes and seconds
