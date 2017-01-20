@@ -1,0 +1,32 @@
+{
+    "name": "iresults/time",
+    "description": "Library for working with 'Time of day'",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7.4"
+    },
+    "authors": [
+        {
+            "name": "Andreas Thurnheer-Meier",
+            "email": "tma@iresults.li"
+        },
+        {
+            "name": "Daniel Corn",
+            "email": "cod@iresults.li"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Iresults\\Time\\": "Classes/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Iresults\\Time\\Tests\\": "Tests/"
+        }
+    }
+}
