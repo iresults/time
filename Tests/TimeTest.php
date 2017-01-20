@@ -75,7 +75,6 @@ class TimeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($hour, $time->getHour());
         $this->assertSame($minute, $time->getMinute());
         $this->assertSame($second, $time->getSecond());
-
     }
 
     public function timeFromStringDataProvider(): array
@@ -87,8 +86,10 @@ class TimeTest extends \PHPUnit_Framework_TestCase
             [' 2:12:34 ', 2, 12, 34],
             ['02:12:34', 2, 12, 34],
             ['02:12:34', 2, 12, 34],
-            ['02:12:34 pm ', 14, 12, 34],
+            ['02 pm', 14, 0, 0],
+            ['02:12 pm', 14, 12, 0],
             ['02:12:34 pm', 14, 12, 34],
+            ['02:12:34 pm ', 14, 12, 34],
             ['02:12:34pm', 14, 12, 34],
             ['22:12:34', 22, 12, 34],
             ['13:7:4', 13, 7, 4],
@@ -112,6 +113,33 @@ class TimeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(2, $time->getHour());
         $this->assertSame(12, $time->getMinute());
         $this->assertSame(34, $time->getSecond());
+    }
+
+    /**
+     * @test
+     * @dataProvider timeFromUnixTimestampDataProvider
+     * @param int $timestamp
+     * @param int $hour
+     * @param int $minute
+     * @param int $second
+     */
+    public function timeFromUnixTimestampTest(int $timestamp, int $hour, int $minute, int $second)
+    {
+        $time = Time::timeFromTimestamp($timestamp);
+        $this->assertSame($hour, $time->getHour());
+        $this->assertSame($minute, $time->getMinute());
+        $this->assertSame($second, $time->getSecond());
+    }
+
+    public function timeFromUnixTimestampDataProvider(): array
+    {
+        return [
+            [time(), intval(date('H')), intval(date('i')), intval(date('s'))],
+            [1484921125, 14, 05, 25],
+            [1484917525, 13, 05, 25],
+            [0, 0, 0, 0],
+            [-1, 23, 59, 59],
+        ];
     }
 
     /**

@@ -210,6 +210,17 @@ class Time
     }
 
     /**
+     * Creates a new time object from the given UNIX timestamp
+     *
+     * @param int $unixTimestamp
+     * @return Time
+     */
+    public static function timeFromTimestamp(int $unixTimestamp): self
+    {
+        return static::timeFromString(gmdate('H:i:s', $unixTimestamp));
+    }
+
+    /**
      * Creates a new time object with the seconds since midnight
      *
      * @param int $secondsSinceMidnight
