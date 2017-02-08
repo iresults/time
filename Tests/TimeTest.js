@@ -421,6 +421,15 @@ class TimeTest extends TestCase {
 
         $diff = (new Time(23)).diff(new Time(2, 10, 53));
         this.assertSame(-1 * (h(20) + m(49) + s(7)), $diff, '-20 hours 49 minutes 7 seconds');
+
+        $diff = (new Time(2, 12)).diff(new Time(2), true);
+        this.assertSame(h(0) + m(12) + s(0), $diff, '-0 hours 12 minutes 0 seconds');
+
+        $diff = (new Time(23)).diff(new Time(2), true);
+        this.assertSame(h(21) + m(0) + s(0), $diff, '-21 hours 0 minutes 0 seconds');
+
+        $diff = (new Time(23)).diff(new Time(2, 10, 53), true);
+        this.assertSame(h(20) + m(49) + s(7), $diff, '-20 hours 49 minutes 7 seconds');
     }
 
     h(hours) {

@@ -411,5 +411,14 @@ class TimeTest extends \PHPUnit_Framework_TestCase
 
         $diff = (new Time(23))->diff(new Time(2, 10, 53));
         $this->assertSame('-20 hours 49 minutes 7 seconds', $diff->format('%R%h hours %i minutes %s seconds'));
+
+        $diff = (new Time(2, 12))->diff(new Time(2), true);
+        $this->assertSame('+0 hours 12 minutes 0 seconds', $diff->format('%R%h hours %i minutes %s seconds'));
+
+        $diff = (new Time(23))->diff(new Time(2), true);
+        $this->assertSame('+21 hours 0 minutes 0 seconds', $diff->format('%R%h hours %i minutes %s seconds'));
+
+        $diff = (new Time(23))->diff(new Time(2, 10, 53), true);
+        $this->assertSame('+20 hours 49 minutes 7 seconds', $diff->format('%R%h hours %i minutes %s seconds'));
     }
 }
