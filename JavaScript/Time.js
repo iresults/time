@@ -35,38 +35,42 @@ module.exports = class Time {
     /**
      * Time constructor
      *
-     * @param {int} $hour
-     * @param {int       } $minute
-     * @param {int       } $second
+     * @param {int} hour
+     * @param {int} minute
+     * @param {int} second
      */
-    constructor($hour, $minute = 0, $second = 0) {
-        if ($hour >= 24) {
-            if ($hour === 24 && ($minute > 0 || $second > 0)) {
+    constructor(hour, minute = 0, second = 0) {
+        hour = parseInt(hour, 10);
+        minute = parseInt(minute, 10);
+        second = parseInt(second, 10);
+
+        if (hour >= 24) {
+            if (hour === 24 && (minute > 0 || second > 0)) {
                 throw new RangeError('If hour is 24 minute and second must be 0', 1441889380);
-            } else if ($hour > 24) {
-                throw new RangeError(`Argument hour "${$hour}" is higher than 24`, 1441889380);
+            } else if (hour > 24) {
+                throw new RangeError(`Argument hour "${hour}" is higher than 24`, 1441889380);
             }
         }
-        if ($minute > 59) {
-            throw new RangeError(`Argument minute "${$minute}" is higher than 59`, 1441889381);
+        if (minute > 59) {
+            throw new RangeError(`Argument minute "${minute}" is higher than 59`, 1441889381);
         }
-        if ($second > 59) {
-            throw new RangeError(`Argument second "${$second}" is higher than 59`, 1441889382);
-        }
-
-        if ($hour < 0) {
-            throw new RangeError(`Argument hour "${$hour}" is lower than 0`, 1441889390);
-        }
-        if ($minute < 0) {
-            throw new RangeError(`Argument minute "${$minute}" is lower than 0`, 1441889391);
-        }
-        if ($second < 0) {
-            throw new RangeError(`Argument second "${$second}" is lower than 0`, 1441889392);
+        if (second > 59) {
+            throw new RangeError(`Argument second "${second}" is higher than 59`, 1441889382);
         }
 
-        this._hour = $hour;
-        this._minute = $minute;
-        this._second = $second;
+        if (hour < 0) {
+            throw new RangeError(`Argument hour "${hour}" is lower than 0`, 1441889390);
+        }
+        if (minute < 0) {
+            throw new RangeError(`Argument minute "${minute}" is lower than 0`, 1441889391);
+        }
+        if (second < 0) {
+            throw new RangeError(`Argument second "${second}" is lower than 0`, 1441889392);
+        }
+
+        this._hour = hour;
+        this._minute = minute;
+        this._second = second;
     }
 
     /**
@@ -105,14 +109,17 @@ module.exports = class Time {
      * Returns the difference between two Time objects
      *
      * @link http://www.php.net/manual/en/datetime.diff.php
-     * @param {Time} datetime2 The time to compare to.
+     * @param {Time} time The time to compare to.
      * @param {boolean} absolute  Should the interval be forced to be positive?
      * @return {number} Returns the difference in seconds
      */
-    diff(datetime2, absolute = false) {
-        const diff = datetime2.secondsSinceMidnight - this.secondsSinceMidnight;
+    diff(time, absolute = false) {
+        if (false === (time instanceof Time)) {
+            throw new TypeError('Argument "time" must be an instance of "Time"');
+        }
+        const diff = time.secondsSinceMidnight - this.secondsSinceMidnight;
 
-        return (absolute) ? Math.abs(diff) : diff;
+        return absolute ? Math.abs(diff) : diff;
     }
 
     // /**
@@ -153,8 +160,10 @@ module.exports = class Time {
      * @returns {Time}
      */
     static timeFromString(formattedTime) {
+        if (typeof formattedTime !== 'string') {
+            throw new TypeError('Argument "formattedTime" must be of type "string"');
+        }
         const $trimmedString = formattedTime.trim();
-
 
         let $properties = formattedTime.trim().split(':').map((value) => {
             return parseInt(value, 10)
@@ -173,6 +182,9 @@ module.exports = class Time {
      * @returns {Time}
      */
     static timeFromTimestamp(unixTimestamp) {
+        if (typeof unixTimestamp !== 'number') {
+            throw new TypeError('Argument "unixTimestamp" must be of type "number"');
+        }
         const dateTime = new Date(unixTimestamp * 1000);
 
         return new Time(
@@ -185,38 +197,55 @@ module.exports = class Time {
     /**
      * Creates a new time object with the seconds since midnight
      *
-     * @param {int} $secondsSinceMidnight
+     * @param {int} secondsSinceMidnight
      * @returns {Time}
      */
-    static timeFromSecondsSinceMidnight($secondsSinceMidnight) {
-        if ($secondsSinceMidnight > 24 * 60 * 60) {
+    static timeFromSecondsSinceMidnight(secondsSinceMidnight) {
+        if (typeof secondsSinceMidnight !== 'number') {
+            throw new TypeError('Argument "unixTimestamp" must be of type "number"');
+        }
+        if (secondsSinceMidnight > 24 * 60 * 60) {
             throw new RangeError(
-                `Argument secondsSinceMidnight "${$secondsSinceMidnight}" is to high'`,
+                `Argument secondsSinceMidnight "${secondsSinceMidnight}" is to high'`,
                 1441889370
             );
-        } else if ($secondsSinceMidnight < 0) {
+        } else if (secondsSinceMidnight < 0) {
             throw new RangeError(
-                `Argument secondsSinceMidnight "${$secondsSinceMidnight}" is to low'`,
+                `Argument secondsSinceMidnight "${secondsSinceMidnight}" is to low'`,
                 1441889371
             );
         }
 
-        let $properties = Time.splitSeconds($secondsSinceMidnight);
+        let $properties = Time._splitSeconds(secondsSinceMidnight);
+
         return new Time(...$properties);
     }
 
     /**
-     * Creates a new time object with the time from the given DateTime instance
+     * Creates a new time object with the time from the given Date instance
      *
-     * @param {Date} dateTime
+     * @param {Date} date
      * @returns {Time}
      */
-    static timeFromDateTime(dateTime) {
+    static timeFromDateTime(date) {
+        if (false === (date instanceof Date)) {
+            throw new TypeError('Argument "date" must be an instance of "Date"');
+        }
         return new Time(
-            dateTime.getHours(),
-            dateTime.getMinutes(),
-            dateTime.getSeconds()
+            date.getHours(),
+            date.getMinutes(),
+            date.getSeconds()
         );
+    }
+
+    /**
+     * Creates a new time object with the time from the given Date instance
+     *
+     * @param {Date} date
+     * @returns {Time}
+     */
+    static timeFromDate(date) {
+        return Time.timeFromDateTime(date);
     }
 
     /**
@@ -224,8 +253,9 @@ module.exports = class Time {
      *
      * @param {int} secondsSinceMidnight
      * @returns {int[]}
+     * @private
      */
-    static splitSeconds(secondsSinceMidnight) {
+    static _splitSeconds(secondsSinceMidnight) {
         const $hour = Math.floor(secondsSinceMidnight / 60 / 60);
         const $minute = Math.floor((secondsSinceMidnight - $hour * 60 * 60) / 60);
         const $second = Math.floor((secondsSinceMidnight - $hour * 60 * 60 - $minute * 60));

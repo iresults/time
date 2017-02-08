@@ -134,9 +134,9 @@ class TimeTest extends TestCase {
     timeFromUnixTimestampDataProvider() {
         const now = new Date();
         return [
-            // [+now, now.getHours(), now.getMinutes(), now.getSeconds()],
-            // [1484921125, 14, 5, 25],
-            // [1484917525, 13, 5, 25],
+            [+now / 1000, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()],
+            [1484921125, 14, 5, 25],
+            [1484917525, 13, 5, 25],
             [0, 0, 0, 0],
             [-1, 23, 59, 59],
         ];
@@ -146,6 +146,14 @@ class TimeTest extends TestCase {
         this.timeFromUnixTimestampDataProvider().forEach((testSet) => {
             this.timeFromUnixTimestamp(...testSet);
         });
+    }
+
+    /**
+     * @test
+     * @expectedException TypeError
+     */
+    timeFromUnixTimestampTestShouldFail() {
+        Time.timeFromTimestamp('1484921125');
     }
 
     /**
@@ -162,6 +170,22 @@ class TimeTest extends TestCase {
         this.assertSame(2, $time.hour);
         this.assertSame(12, $time.minute);
         this.assertSame(34, $time.second);
+    }
+
+    /**
+     * @test
+     * @expectedException TypeError
+     */
+    timeFromDateTimeTestShouldFail() {
+        Time.timeFromDateTime('Fri 11.09.2015 17:07:32');
+    }
+
+    /**
+     * @test
+     * @expectedException TypeError
+     */
+    timeFromSecondsSinceMidnightTestShouldFail() {
+        Time.timeFromSecondsSinceMidnight('3600')
     }
 
 
@@ -205,7 +229,7 @@ class TimeTest extends TestCase {
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException RangeError
      */
     initializeWithToHighHourTestShouldFail() {
         new Time(25);
@@ -213,7 +237,7 @@ class TimeTest extends TestCase {
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException RangeError
      */
     initializeWithMaxHourAndToHighMinuteTestShouldFail() {
         new Time(24, 1);
@@ -221,7 +245,7 @@ class TimeTest extends TestCase {
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException RangeError
      */
     initializeWithMaxHourAndToHighSecondTestShouldFail() {
         new Time(24, 0, 1);
@@ -229,7 +253,7 @@ class TimeTest extends TestCase {
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException RangeError
      */
     initializeWithToHighMinuteTestShouldFail() {
         new Time(2, 60);
@@ -237,7 +261,7 @@ class TimeTest extends TestCase {
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException RangeError
      */
     initializeWithToHighSecondTestShouldFail() {
         new Time(0, 0, 60);
@@ -245,7 +269,7 @@ class TimeTest extends TestCase {
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException RangeError
      */
     initializeWithToHighHourInStringTestShouldFail() {
         Time.timeFromString('25:00:00');
@@ -253,7 +277,7 @@ class TimeTest extends TestCase {
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException RangeError
      */
     initializeWithMixedAmPmTestShouldFail() {
         Time.timeFromString('22:00:00 pm');
@@ -261,7 +285,7 @@ class TimeTest extends TestCase {
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException RangeError
      */
     initializeWithToMaxHourAndHighMinuteInStringTestShouldFail() {
         Time.timeFromString('24:01:00');
@@ -269,7 +293,7 @@ class TimeTest extends TestCase {
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException RangeError
      */
     initializeWithToMaxHourAndHighSecondInStringTestShouldFail() {
         Time.timeFromString('24:00:01');
@@ -277,7 +301,7 @@ class TimeTest extends TestCase {
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException RangeError
      */
     initializeWithToHighMinuteInStringTestShouldFail() {
         Time.timeFromString('2:60:00');
@@ -285,7 +309,7 @@ class TimeTest extends TestCase {
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException RangeError
      */
     initializeWithToHighSecondInStringTestShouldFail() {
         Time.timeFromString('0:0:60');
@@ -293,7 +317,7 @@ class TimeTest extends TestCase {
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException RangeError
      */
     initializeWithToLowHourTestShouldFail() {
         new Time(-1);
@@ -301,7 +325,7 @@ class TimeTest extends TestCase {
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException RangeError
      */
     initializeWithToLowMinuteTestShouldFail() {
         new Time(2, -1);
@@ -309,7 +333,7 @@ class TimeTest extends TestCase {
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException RangeError
      */
     initializeWithToLowSecondTestShouldFail() {
         new Time(0, 0, -1);
@@ -317,7 +341,7 @@ class TimeTest extends TestCase {
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException RangeError
      */
     initializeWithToLowHourInStringTestShouldFail() {
         Time.timeFromString('-1:00:00');
@@ -325,7 +349,7 @@ class TimeTest extends TestCase {
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException RangeError
      */
     initializeWithToLowMinuteInStringTestShouldFail() {
         Time.timeFromString('2:-1:00');
@@ -333,7 +357,7 @@ class TimeTest extends TestCase {
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException RangeError
      */
     initializeWithToLowSecondInStringTestShouldFail() {
         Time.timeFromString('0:0:-1');
@@ -341,7 +365,7 @@ class TimeTest extends TestCase {
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException RangeError
      * @expectedExceptionCode 1441889370
      */
     timeFromSecondsSinceMidnightToHighTestShouldFail() {
@@ -350,7 +374,7 @@ class TimeTest extends TestCase {
 
     /**
      * @test
-     * @expectedException \OutOfBoundsException
+     * @expectedException RangeError
      * @expectedExceptionCode 1441889371
      */
     timeFromSecondsSinceMidnightToLowTestShouldFail() {
@@ -431,6 +455,14 @@ class TimeTest extends TestCase {
         $diff = (new Time(23)).diff(new Time(2, 10, 53), true);
         this.assertSame(h(20) + m(49) + s(7), $diff, '-20 hours 49 minutes 7 seconds');
     }
+
+    /**
+     * @test
+     */
+    diffWithStringInputTestShouldFail() {
+        (new Time(2)).diff('02:10:00');
+    }
+
 
     h(hours) {
         return 60 * 60 * hours;

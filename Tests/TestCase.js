@@ -4,7 +4,7 @@
 module.exports = class TestCase {
     assertSame(expected, actual, message = '') {
         if (expected !== actual) {
-            throw new Error(`Value ${actual} does not match expected ${expected}` + (message ? ': "' + message + '"': ''));
+            throw new Error(`Value ${actual} does not match expected ${expected}` + (message ? ': "' + message + '"' : ''));
         }
     }
 
@@ -14,6 +14,20 @@ module.exports = class TestCase {
 
     printError(message) {
         console.log('\u001B[0;31m' + message + '\u001B[0m');
+    }
+
+    getTestDescription(name) {
+        return this.capitalizeFirstLetter(
+            name
+                .replace(/\.?([A-Z])/g, function (x, y) {
+                    return ' ' + y.toLowerCase()
+                })
+                .replace(/^_/, "")
+        );
+    }
+
+    capitalizeFirstLetter(input) {
+        return input.charAt(0).toUpperCase() + input.slice(1);
     }
 
     runTests() {
@@ -44,9 +58,9 @@ module.exports = class TestCase {
             }
 
             if (success) {
-                this.printSuccess(`[PASSED] Run ${prop}()`);
+                this.printSuccess(`[PASSED] ${this.getTestDescription(prop)}()`);
             } else {
-                this.printError(`[FAILED] Run ${prop}(): ${error}`);
+                this.printError(`[FAILED] ${this.getTestDescription(prop)}(): ${error}`);
             }
         });
     }
