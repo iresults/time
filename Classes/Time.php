@@ -142,9 +142,8 @@ class Time
     }
 
     /**
-     * Returns the difference between two DateTime objects
+     * Returns the difference between two Time objects
      *
-     * @link http://www.php.net/manual/en/datetime.diff.php
      * @param Time $datetime2 The time to compare to.
      * @param bool $absolute  Should the interval be forced to be positive?
      * @return DateInterval The http://www.php.net/manual/en/class.dateinterval.php DateInterval} object representing the difference between the two dates or FALSE on failure.

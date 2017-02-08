@@ -101,6 +101,20 @@ module.exports = class Time {
             + this.second;
     }
 
+    /**
+     * Returns the difference between two Time objects
+     *
+     * @link http://www.php.net/manual/en/datetime.diff.php
+     * @param {Time} datetime2 The time to compare to.
+     * @param {boolean} absolute  Should the interval be forced to be positive?
+     * @return {number} Returns the difference in seconds
+     */
+    diff(datetime2, absolute = false) {
+        const diff = datetime2.secondsSinceMidnight - this.secondsSinceMidnight;
+
+        return (absolute) ? Math.abs(diff) : diff;
+    }
+
     // /**
     //  * Returns date formatted according to given format
     //  *

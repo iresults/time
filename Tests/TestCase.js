@@ -2,9 +2,9 @@
  * Created by cod on 7.2.17.
  */
 module.exports = class TestCase {
-    assertSame(expected, actual) {
+    assertSame(expected, actual, message = '') {
         if (expected !== actual) {
-            throw new Error(`Value ${actual} does not match expected ${expected}`);
+            throw new Error(`Value ${actual} does not match expected ${expected}` + (message ? ': "' + message + '"': ''));
         }
     }
 

@@ -393,32 +393,47 @@ class TimeTest extends TestCase {
     //     this.assertSame('1 PM 02:34', $time.format('g A i:s'));
     // }
 
-    // /**
-    //  * @test
-    //  */
-    // diffTest()
-    // {
-    //     $diff = (new Time(2))->diff(new Time(2));
-    //     this.assertSame('+0 hours 0 minutes 0 seconds', $diff->format('%R%h hours %i minutes %s seconds'));
-    //
-    //     $diff = (new Time(2))->diff(new Time(2, 12));
-    //     this.assertSame('+0 hours 12 minutes 0 seconds', $diff->format('%R%h hours %i minutes %s seconds'));
-    //
-    //     $diff = (new Time(2))->diff(new Time(23));
-    //     this.assertSame('+21 hours 0 minutes 0 seconds', $diff->format('%R%h hours %i minutes %s seconds'));
-    //
-    //     $diff = (new Time(2, 10, 53))->diff(new Time(23));
-    //     this.assertSame('+20 hours 49 minutes 7 seconds', $diff->format('%R%h hours %i minutes %s seconds'));
-    //
-    //     $diff = (new Time(2, 12))->diff(new Time(2));
-    //     this.assertSame('-0 hours 12 minutes 0 seconds', $diff->format('%R%h hours %i minutes %s seconds'));
-    //
-    //     $diff = (new Time(23))->diff(new Time(2));
-    //     this.assertSame('-21 hours 0 minutes 0 seconds', $diff->format('%R%h hours %i minutes %s seconds'));
-    //
-    //     $diff = (new Time(23))->diff(new Time(2, 10, 53));
-    //     this.assertSame('-20 hours 49 minutes 7 seconds', $diff->format('%R%h hours %i minutes %s seconds'));
-    // }
+    /**
+     * @test
+     */
+    diffTest() {
+        const h = this.h;
+        const m = this.m;
+        const s = this.s;
+        let $diff;
+        $diff = (new Time(2)).diff(new Time(2));
+        this.assertSame(0, $diff, '+0 hours 0 minutes 0 seconds');
+
+        $diff = (new Time(2)).diff(new Time(2, 12));
+        this.assertSame(h(0) + m(12) + s(0), $diff, '+0 hours 12 minutes 0 seconds');
+
+        $diff = (new Time(2)).diff(new Time(23));
+        this.assertSame(h(21) + m(0) + s(0), $diff, '+21 hours 0 minutes 0 seconds');
+
+        $diff = (new Time(2, 10, 53)).diff(new Time(23));
+        this.assertSame(h(20) + m(49) + s(7), $diff, '+20 hours 49 minutes 7 seconds');
+
+        $diff = (new Time(2, 12)).diff(new Time(2));
+        this.assertSame(-1 * (h(0) + m(12) + s(0)), $diff, '-0 hours 12 minutes 0 seconds');
+
+        $diff = (new Time(23)).diff(new Time(2));
+        this.assertSame(-1 * (h(21) + m(0) + s(0)), $diff, '-21 hours 0 minutes 0 seconds');
+
+        $diff = (new Time(23)).diff(new Time(2, 10, 53));
+        this.assertSame(-1 * (h(20) + m(49) + s(7)), $diff, '-20 hours 49 minutes 7 seconds');
+    }
+
+    h(hours) {
+        return 60 * 60 * hours;
+    }
+
+    m(minutes) {
+        return 60 * minutes;
+    }
+
+    s(seconds) {
+        return seconds;
+    }
 }
 
 (new TimeTest()).runTests();
