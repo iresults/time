@@ -1,5 +1,5 @@
 {
-  "name": "time",
+  "name": "iresults-time",
   "version": "0.1.1",
   "description": "Library for working with 'Time of day'",
   "main": "JavaScript/Time.js",
