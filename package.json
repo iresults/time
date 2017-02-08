@@ -1,0 +1,22 @@
+{
+  "name": "time",
+  "version": "0.1.1",
+  "description": "Library for working with 'Time of day'",
+  "main": "JavaScript/Time.js",
+  "scripts": {
+    "test": "node Tests/TimeTest.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iresults/time.git"
+  },
+  "keywords": [
+    "time"
+  ],
+  "author": "Daniel Corn <cod@iresults.li>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iresults/time/issues"
+  },
+  "homepage": "https://github.com/iresults/time#readme"
+}

@@ -58,9 +58,9 @@ class Time
     /**
      * Time constructor
      *
-     * @param int|string $hour
-     * @param int        $minute
-     * @param int        $second
+     * @param int $hour
+     * @param int $minute
+     * @param int $second
      */
     public function __construct(int $hour, int $minute = 0, int $second = 0)
     {
@@ -273,5 +273,4 @@ class Time
 
         return array($hour, $minute, $second);
     }
-
 }
